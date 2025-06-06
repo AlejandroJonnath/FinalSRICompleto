@@ -99,7 +99,9 @@
     <tr>
       <th>ID</th>
       <th>Usuario</th>
-      <th>Contraseña</th>
+
+      <!-- <th>Contraseña</th> -->
+
       <th>Acciones</th>
     </tr>
     </thead>
@@ -111,7 +113,11 @@
     <tr>
       <td><%= u.getId() %></td>
       <td><%= u.getUsuario() %></td>
-      <td><%= u.getContrasena() %></td>
+
+
+      <!--<td><%= u.getContrasena() %></td>-->
+
+
       <td>
         <!-- Botón Editar -->
         <button

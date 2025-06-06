@@ -33,6 +33,7 @@
 <table>
   <thead>
   <tr>
+    <th>Categoria</th>
     <th>Nombre</th>
     <th>Marca</th>
     <th>Precio</th>
@@ -46,6 +47,7 @@
       for (Producto p : inactivos) {
   %>
   <tr>
+    <td><%= p.getCategoria().getNombre() %></td>
     <td><%= p.getNombre() %></td>
     <td><%= p.getMarca() %></td>
     <td>$ <%= p.getPrecio() %></td>

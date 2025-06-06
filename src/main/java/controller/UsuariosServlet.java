@@ -2,10 +2,7 @@ package controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 import model.Usuario;
 import services.UserService;
 
@@ -20,26 +17,25 @@ public class UsuariosServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // 1. Verificar que exista sesión y sea ADMIN
+        // Verificar sesión activa y rol ADMIN
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("usuario") == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
+
         String rol = (String) session.getAttribute("rol");
-        if (!"ADMIN".equals(rol)) {
-            // Redirigir a /productos si no es admin
+        if (!"ADMIN".equalsIgnoreCase(rol)) {
             response.sendRedirect(request.getContextPath() + "/productos");
             return;
         }
 
-        // 2. Obtener lista de usuarios desde la base de datos
+        // Obtener lista de usuarios y mostrarla en Main.jsp
         List<Usuario> listaUsuarios = userService.obtenerTodosLosUsuarios();
         request.setAttribute("usuarios", listaUsuarios);
+        request.setAttribute("vista", "usuarios");
 
-        // 3. Forward al JSP que mostrará la tabla de usuarios
-        request.getRequestDispatcher("/usuarios.jsp")
-                .forward(request, response);
+        request.getRequestDispatcher("/usuarios.jsp").forward(request, response);
     }
 
     @Override
@@ -47,24 +43,27 @@ public class UsuariosServlet extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getParameter("action");
 
-        if ("crear".equalsIgnoreCase(action)) {
-            crearUsuario(request, response);
-        } else if ("editar".equalsIgnoreCase(action)) {
-            editarUsuario(request, response);
-        } else if ("eliminar".equalsIgnoreCase(action)) {
-            eliminarUsuario(request, response);
-        } else {
-            response.sendRedirect(request.getContextPath() + "/usuarios");
+        switch (action != null ? action.toLowerCase() : "") {
+            case "crear":
+                crearUsuario(request, response);
+                break;
+            case "editar":
+                editarUsuario(request, response);
+                break;
+            case "eliminar":
+                eliminarUsuario(request, response);
+                break;
+            default:
+                response.sendRedirect(request.getContextPath() + "/usuarios");
+                break;
         }
     }
 
     private void crearUsuario(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Obtener parámetros del formulario
         String nombreUsuario = request.getParameter("usuario");
-        String contrasena    = request.getParameter("contrasena");
+        String contrasena = request.getParameter("contrasena");
 
-        // Validar parámetros mínimos (campo vacío)
         if (nombreUsuario == null || nombreUsuario.trim().isEmpty()
                 || contrasena == null || contrasena.trim().isEmpty()) {
             request.setAttribute("errorCrear", "Debe completar usuario y contraseña.");
@@ -72,10 +71,10 @@ public class UsuariosServlet extends HttpServlet {
             return;
         }
 
-        // Crear nuevo Usuario
         Usuario nuevo = new Usuario();
         nuevo.setUsuario(nombreUsuario.trim());
         nuevo.setContrasena(contrasena.trim());
+
         boolean creado = userService.registrarUsuario(nuevo);
 
         if (!creado) {
@@ -83,16 +82,16 @@ public class UsuariosServlet extends HttpServlet {
         } else {
             request.setAttribute("msgCrear", "Usuario creado correctamente.");
         }
+
         doGet(request, response);
     }
 
     private void editarUsuario(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String idParam        = request.getParameter("id");
-        String nuevoUsuario   = request.getParameter("usuario");
-        String nuevaContrasena= request.getParameter("contrasena");
+        String idParam = request.getParameter("id");
+        String nuevoUsuario = request.getParameter("usuario");
+        String nuevaContrasena = request.getParameter("contrasena");
 
-        // Validar que los parámetros existan
         if (idParam == null || idParam.trim().isEmpty()) {
             request.setAttribute("errorEditar", "ID de usuario inválido.");
             doGet(request, response);
@@ -108,7 +107,6 @@ public class UsuariosServlet extends HttpServlet {
             return;
         }
 
-        // Validar que los campos no estén vacíos
         if (nuevoUsuario == null || nuevoUsuario.trim().isEmpty()
                 || nuevaContrasena == null || nuevaContrasena.trim().isEmpty()) {
             request.setAttribute("errorEditar", "Usuario y contraseña no pueden estar vacíos.");
@@ -116,7 +114,6 @@ public class UsuariosServlet extends HttpServlet {
             return;
         }
 
-        // Obtener el usuario actual
         Usuario existente = userService.buscarPorId(id);
         if (existente == null) {
             request.setAttribute("errorEditar", "El usuario no existe.");
@@ -124,9 +121,9 @@ public class UsuariosServlet extends HttpServlet {
             return;
         }
 
-        // Actualizar datos
         existente.setUsuario(nuevoUsuario.trim());
         existente.setContrasena(nuevaContrasena.trim());
+
         boolean actualizado = userService.actualizarUsuario(existente);
 
         if (!actualizado) {
@@ -134,12 +131,14 @@ public class UsuariosServlet extends HttpServlet {
         } else {
             request.setAttribute("msgEditar", "Usuario actualizado correctamente.");
         }
+
         doGet(request, response);
     }
 
     private void eliminarUsuario(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String idParam = request.getParameter("id");
+
         if (idParam == null || idParam.trim().isEmpty()) {
             request.setAttribute("errorEliminar", "ID de usuario inválido.");
             doGet(request, response);
@@ -156,11 +155,13 @@ public class UsuariosServlet extends HttpServlet {
         }
 
         boolean eliminado = userService.eliminarUsuarioPorId(id);
+
         if (!eliminado) {
             request.setAttribute("errorEliminar", "No se pudo eliminar el usuario.");
         } else {
             request.setAttribute("msgEliminar", "Usuario eliminado correctamente.");
         }
+
         doGet(request, response);
     }
 }

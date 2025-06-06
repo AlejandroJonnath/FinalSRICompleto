@@ -2,6 +2,7 @@ package repository;
 
 import model.Usuario;
 import util.Conexion;
+import util.Encriptacion;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,7 +17,8 @@ public class UserRepository implements IUserRepository {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, usuario);
-            ps.setString(2, contrasena);
+            ps.setString(2, Encriptacion.sha1(contrasena));
+
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     Usuario u = new Usuario();
@@ -61,7 +63,7 @@ public class UserRepository implements IUserRepository {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, usuario.getUsuario());
-            ps.setString(2, usuario.getContrasena());
+            ps.setString(2, Encriptacion.sha1(usuario.getContrasena()));
 
             int filas = ps.executeUpdate();
             return filas > 0;
@@ -70,10 +72,6 @@ public class UserRepository implements IUserRepository {
         }
         return false;
     }
-
-    // =======================================
-    // IMPLEMENTACIÓN DE MÉTODOS NUEVOS PARA CRUD
-    // =======================================
 
     @Override
     public List<Usuario> obtenerTodos() {
@@ -125,8 +123,9 @@ public class UserRepository implements IUserRepository {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, usuario.getUsuario());
-            ps.setString(2, usuario.getContrasena());
+            ps.setString(2, Encriptacion.sha1(usuario.getContrasena()));
             ps.setInt(3, usuario.getId());
+
             int filas = ps.executeUpdate();
             return filas > 0;
         } catch (SQLException e) {

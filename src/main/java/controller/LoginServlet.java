@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import model.Usuario;
 import services.UserService;
+import util.Encriptacion;
 
 import java.io.IOException;
 
@@ -15,20 +16,17 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Si ya existe sesión con un usuario autenticado, redirigir a /productos
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("usuario") != null) {
             response.sendRedirect(request.getContextPath() + "/productos");
             return;
         }
-        // Mostrar el formulario de login/registro
         request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         String action = request.getParameter("action");
         if ("register".equalsIgnoreCase(action)) {
             registrarUsuario(request, response);
@@ -51,11 +49,14 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
+        // Usar validarUsuario en lugar de buscarPorUsuario
         Usuario u = userService.validarUsuario(usuarioParam.trim(), contrasenaParam.trim());
+
         if (u != null) {
             HttpSession session = request.getSession();
             session.setAttribute("usuario", u.getUsuario());
-            if (u.getUsuario().equalsIgnoreCase("admin")) {
+
+            if ("admin".equalsIgnoreCase(u.getUsuario())) {
                 session.setAttribute("rol", "ADMIN");
             } else {
                 session.setAttribute("rol", "USER");
@@ -85,7 +86,7 @@ public class LoginServlet extends HttpServlet {
 
         Usuario nuevoUsuario = new Usuario();
         nuevoUsuario.setUsuario(usuarioParam.trim());
-        nuevoUsuario.setContrasena(contrasenaParam.trim());
+        nuevoUsuario.setContrasena(contrasenaParam.trim()); // La encriptación se maneja en el servicio/repositorio
 
         boolean registrado = userService.registrarUsuario(nuevoUsuario);
         if (registrado) {

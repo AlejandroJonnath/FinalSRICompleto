@@ -38,6 +38,7 @@
   <!-- NUEVO BOTÓN: Solo para ADMIN -->
   <a href="usuarios"><button class="btn btn-admin-usuarios">Administrar Usuarios</button></a>
 </div>
+</div>
 <% } %>
 
 <% if (error != null) { %>
@@ -57,6 +58,7 @@
 <table>
   <thead>
   <tr>
+    <th>Categoria</th>
     <th>Nombre</th>
     <th>Marca</th>
     <th>Precio</th>
@@ -68,8 +70,10 @@
   <%
     if (productos != null) {
       for (Producto prod : productos) {
+
   %>
   <tr>
+    <td><%= prod.getCategoria().getNombre() %></td>
     <td><%= prod.getNombre() %></td>
     <td><%= prod.getMarca() %></td>
     <td>$ <%= prod.getPrecio() %></td>

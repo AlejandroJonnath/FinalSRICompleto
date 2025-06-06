@@ -1,12 +1,20 @@
 package services;
 
+import model.Categoria;
 import model.Producto;
+import repository.CategoriaRepository;
 import repository.ProductRepository;
 
 import java.util.List;
 
 public class ProductService {
     private final ProductRepository repository = new ProductRepository();
+    private final CategoriaRepository categoriaRepository = new CategoriaRepository();
+    private final ProductRepository productRepository = new ProductRepository();
+
+    public List<Categoria> listarCategorias() {
+        return categoriaRepository.listarTodas();
+    }
 
     public List<Producto> listarProductos() {
         // devuelve solo activos (activo = 1)
@@ -48,4 +56,7 @@ public class ProductService {
     public List<Producto> listarProductosInactivos() {
         return repository.listarInactivos();
     }
+
+
 }
+

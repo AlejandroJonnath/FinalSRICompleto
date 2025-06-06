@@ -3,6 +3,7 @@ package controller;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import model.Categoria;
 import model.Producto;
 import services.ProductService;
 
@@ -24,42 +25,40 @@ public class AddProductServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/productos");
             return;
         }
+
         // 2) Simplemente mostramos el formulario
+        List<Categoria> categorias = productService.listarCategorias();
+        request.setAttribute("categorias", categorias);
         request.getRequestDispatcher("addProduct.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // 1) Verificar sesión y rol ADMIN
         HttpSession session = request.getSession(false);
         if (session == null || !"ADMIN".equals(session.getAttribute("rol"))) {
             response.sendRedirect(request.getContextPath() + "/productos");
             return;
         }
 
-        // 2) Leer parámetros como String
         String nombreParam = request.getParameter("nombre");
         String marcaParam  = request.getParameter("marca");
         String precioParam = request.getParameter("precio");
         String stockParam  = request.getParameter("stock");
+        String categoriaParam = request.getParameter("categoriaId");
 
-        // 3) Lista para acumular mensajes de error
         List<String> errores = new ArrayList<>();
 
-        // 4) Validar "nombre": no nulo, no vacío, longitud mínima
         if (nombreParam == null || nombreParam.trim().isEmpty()) {
             errores.add("El nombre del producto es obligatorio.");
         } else if (nombreParam.trim().length() < 2) {
             errores.add("El nombre debe tener al menos 2 caracteres.");
         }
 
-        // 5) Validar "marca": no nulo, no vacío
         if (marcaParam == null || marcaParam.trim().isEmpty()) {
             errores.add("La marca del producto es obligatoria.");
         }
 
-        // 6) Validar "precio": no nulo, convertible a BigDecimal, mayor que 0
         BigDecimal precio = null;
         if (precioParam == null || precioParam.trim().isEmpty()) {
             errores.add("El precio es obligatorio.");
@@ -74,7 +73,6 @@ public class AddProductServlet extends HttpServlet {
             }
         }
 
-        // 7) Validar "stock": no nulo, convertible a entero, >= 0
         Integer stock = null;
         if (stockParam == null || stockParam.trim().isEmpty()) {
             errores.add("El campo stock es obligatorio.");
@@ -89,7 +87,13 @@ public class AddProductServlet extends HttpServlet {
             }
         }
 
-        // 8) Si hay errores, reenviar al JSP con mensajes y valores ingresados
+        Integer categoriaId = null;
+        try {
+            categoriaId = Integer.parseInt(categoriaParam);
+        } catch (Exception e) {
+            errores.add("Debe seleccionar una categoría válida.");
+        }
+
         if (!errores.isEmpty()) {
             request.setAttribute("errores", errores);
             request.setAttribute("nombre", nombreParam);
@@ -100,16 +104,19 @@ public class AddProductServlet extends HttpServlet {
             return;
         }
 
-        // 9) Si no hay errores, crear objeto Producto y guardarlo
         Producto p = new Producto();
         p.setNombre(nombreParam.trim());
         p.setMarca(marcaParam.trim());
         p.setPrecio(precio);
         p.setStock(stock);
 
+        // ⚠️ ESTA ES LA PARTE QUE FALTABA
+        Categoria categoria = new Categoria();
+        categoria.setId(categoriaId);
+        p.setCategoria(categoria);
+
         productService.insertarProducto(p);
 
-        // 10) Redirigir al listado de productos
         response.sendRedirect(request.getContextPath() + "/productos");
     }
 }

@@ -1,3 +1,4 @@
+
 package services;
 
 import model.Usuario;
@@ -10,22 +11,18 @@ public class UserService {
     private final IUserRepository userRepo = new UserRepository();
 
     public Usuario validarUsuario(String usuario, String contrasena) {
+        // Removemos la encriptación aquí porque ya se hace en el repositorio
         return userRepo.validarUsuario(usuario, contrasena);
     }
 
     public boolean registrarUsuario(Usuario nuevoUsuario) {
-        // 1. Verificar si ya existe un usuario con ese nombre
         Usuario existente = userRepo.buscarPorUsuario(nuevoUsuario.getUsuario());
         if (existente != null) {
-            return false; // Ya existe el usuario
+            return false;
         }
-        // 2. Guardar usuario
         return userRepo.registrarUsuario(nuevoUsuario);
     }
 
-    // ============================
-    // NUEVOS MÉTODOS PARA CRUD
-    // ============================
     public List<Usuario> obtenerTodosLosUsuarios() {
         return userRepo.obtenerTodos();
     }

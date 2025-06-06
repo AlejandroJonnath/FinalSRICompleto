@@ -4,18 +4,26 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-
-//1) Crearemos la clase para poder tener conexión con la base de datos
+/**
+ * Clase utilitaria para manejar la conexión a la base de datos MySQL.
+ */
 public class Conexion {
 
-    //2) Creamos el url string para la conexión
+    // URL de conexión a la base de datos, con el puerto y nombre de la base
     private static final String URL = "jdbc:mysql://localhost:3306/mimir_petshop";
-    //3) Colocamos el usuario de nuestra bdd
+
+    // Usuario de la base de datos
     private static final String USER = "root";
-    //4) Colocamos la contraseña de nuestra bdd (en este caso en blanco porque no tenemos ninguna contraseña)
+
+    // Contraseña del usuario de la base de datos (no hay contraseña ekisde)
     private static final String PASS = "";
 
-    //5) Hacemos un constructor para poder instanciar en las demas clases y tener una conexión por peticiones
+    /**
+     * Método estático para obtener una conexión a la base de datos.
+     *
+     * @return Connection Objeto conexión
+     * @throws SQLException Si ocurre un error al conectar
+     */
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASS);
     }

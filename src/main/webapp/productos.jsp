@@ -5,6 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Productos - Mimir Petshop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/productos.css" />
 </head>
 <body>
@@ -37,7 +38,6 @@
   <a href="productosInactivos"><button class="btn btn-inactivos">Ver Inactivos</button></a>
   <!-- NUEVO BOTÓN: Solo para ADMIN -->
   <a href="usuarios"><button class="btn btn-admin-usuarios">Administrar Usuarios</button></a>
-</div>
 </div>
 <% } %>
 

@@ -73,7 +73,7 @@
 <div id="modalReactivar">
   <div class="modal-content">
     <h3>¿Reactivar producto?</h3>
-    <p>El producto volverá a estar disponible para la venta.</p>
+    <p>El producto volverá a estar disponible para la venta</p>
     <div style="margin-top: 20px;">
       <button onclick="reactivarProducto()" class="btn btn-reactivar">Reactivar</button>
       <button onclick="cerrarModal()" class="btn" style="margin-left:10px;">Cancelar</button>

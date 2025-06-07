@@ -1,58 +1,69 @@
 package controller; // Define el paquete donde está esta clase
 
-import jakarta.servlet.ServletException; // Importa la excepción ServletException
-import jakarta.servlet.annotation.WebServlet; // Importa la anotación para mapear el servlet a una URL
-import jakarta.servlet.http.*; // Importa clases HTTP: HttpServlet, HttpServletRequest, HttpServletResponse y HttpSession
+import jakarta.servlet.ServletException; // Importa la excepción ServletException para manejo de errores en servlets
+import jakarta.servlet.annotation.WebServlet; // Importa la anotación para mapear el servlet a una URL específica
+import jakarta.servlet.http.*; // Importa las clases HttpServlet, HttpServletRequest, HttpServletResponse y HttpSession necesarias para manejar peticiones HTTP
 
-import java.io.IOException; // Importa la excepción IOException
-import java.util.Map; // Importa la interfaz Map para colecciones clave-valor
+import java.io.IOException; // Importa la excepción IOException para manejo de errores de entrada/salida
+import java.util.Map; // Importa la interfaz Map para manejar colecciones clave-valor (aquí para el carrito)
 
-@WebServlet("/addToCart") // Mapea este servlet a la URL “/addToCart”
-public class AddToCartServlet extends HttpServlet { // Declara la clase que extiende HttpServlet
+@WebServlet("/addToCart") // Define que este servlet responderá a la URL "/addToCart"
+public class AddToCartServlet extends HttpServlet { // Declara la clase que hereda de HttpServlet para manejar peticiones HTTP
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException { // Método que maneja peticiones POST
+            throws ServletException, IOException { // Método que maneja peticiones POST para añadir productos al carrito
 
-        HttpSession session = request.getSession(false); // Obtiene la sesión existente sin crear una nueva
+        // 1) Verificar que exista una sesión activa y que el usuario esté logueado
+        HttpSession session = request.getSession(false); // Obtiene la sesión actual sin crear una nueva si no existe
         if (session == null || session.getAttribute("usuario") == null) { // Si no hay sesión o no hay usuario logueado
-            response.sendRedirect(request.getContextPath() + "/login"); // Redirige al formulario de login
-            return; // Termina la ejecución para no procesar más
+            response.sendRedirect(request.getContextPath() + "/login"); // Redirige al login para autenticación
+            return; // Termina la ejecución para evitar continuar sin usuario válido
         }
 
-        String idParam = request.getParameter("productoId"); // Obtiene el parámetro "productoId" del formulario
-        String cantidadParam = request.getParameter("cantidad"); // Obtiene el parámetro "cantidad" del formulario
+        // 2) Leer parámetros del formulario: ID del producto y cantidad a añadir
+        String idParam = request.getParameter("productoId"); // Obtiene el parámetro "productoId"
+        String cantidadParam = request.getParameter("cantidad"); // Obtiene el parámetro "cantidad"
 
-        if (idParam == null || cantidadParam == null) { // Sí falta alguno de los parámetros
+        // 3) Validar que ambos parámetros estén presentes
+        if (idParam == null || cantidadParam == null) { // Si falta alguno
             response.sendRedirect(request.getContextPath() + "/productos?error=missingParams"); // Redirige con error de parámetros faltantes
-            return; // Termina la ejecución
+            return; // Termina la ejecución para evitar procesar datos incompletos
         }
 
         int productoId; // Variable para almacenar el ID convertido a entero
         int cantidad;   // Variable para almacenar la cantidad convertida a entero
 
         try {
-            productoId = Integer.parseInt(idParam.trim()); // Convierte el ID a entero, eliminando espacios
-            cantidad = Integer.parseInt(cantidadParam.trim()); // Convierte la cantidad a entero, eliminando espacios
+            // 4) Convertir parámetros a enteros y validar que la cantidad sea positiva
+            productoId = Integer.parseInt(idParam.trim()); // Convierte el ID del producto a entero, eliminando espacios extras
+            cantidad = Integer.parseInt(cantidadParam.trim()); // Convierte la cantidad a entero
 
-            if (cantidad <= 0) { // Si la cantidad no es mayor que 0
-                throw new NumberFormatException("Cantidad debe ser mayor a 0"); // Fuerza excepción para manejo de error
+            if (cantidad <= 0) { // Si la cantidad no es válida (menor o igual a 0)
+                throw new NumberFormatException("Cantidad debe ser mayor a 0"); // Lanza excepción para manejo de error
             }
 
-        } catch (NumberFormatException e) { // Captura errores de conversión o cantidad inválida
+        } catch (NumberFormatException e) { // Captura cualquier error de conversión o valor inválido
             response.sendRedirect(request.getContextPath() + "/productos?error=invalidInput"); // Redirige con error de entrada inválida
-            return; // Termina la ejecución
+            return; // Termina la ejecución para evitar datos incorrectos
         }
 
-        @SuppressWarnings("unchecked") // Suprime advertencia de casteo inseguro
-        Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart"); // Obtiene el carrito de la sesión
-        if (cart == null) { // Si no existe carrito en la sesión
-            cart = new java.util.HashMap<>(); // Crea un nuevo HashMap para el carrito
+        // 5) Obtener el carrito de la sesión (Map donde la clave es el productoId y el valor es la cantidad)
+        @SuppressWarnings("unchecked") // Suprime advertencias de tipo inseguro debido a casteo
+        Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart"); // Obtiene el carrito actual
+
+        if (cart == null) { // Si el carrito no existe aún en la sesión
+            cart = new java.util.HashMap<>(); // Crea un nuevo carrito vacío
         }
 
-        int cantidadPrevia = cart.getOrDefault(productoId, 0); // Obtiene la cantidad previa del producto en el carrito, o 0 si no existe
-        cart.put(productoId, cantidadPrevia + cantidad); // Suma la nueva cantidad a la previa y actualiza el carrito
+        // 6) Actualizar la cantidad del producto en el carrito
+        int cantidadPrevia = cart.getOrDefault(productoId, 0); // Obtiene la cantidad actual del producto en el carrito, o 0 si no existe
+        cart.put(productoId, cantidadPrevia + cantidad); // Suma la cantidad nueva a la previa y actualiza el carrito
 
-        session.setAttribute("cart", cart); // Guarda el carrito actualizado en la sesión
-        response.sendRedirect(request.getContextPath() + "/productos?success=added"); // Redirige a la lista de productos con mensaje de éxito
+        // 7) Guardar el carrito actualizado en la sesión
+        session.setAttribute("cart", cart);
+
+        // 8) Redirigir a la página de productos con mensaje de éxito
+        response.sendRedirect(request.getContextPath() + "/productos?success=added");
     }
 }

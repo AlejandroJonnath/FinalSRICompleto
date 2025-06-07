@@ -6,71 +6,101 @@ import repository.UserRepository;
 
 import java.util.List;
 
+/**
+ * Sección: Clase UserService
+ * Esta clase maneja la lógica de negocio relacionada con los usuarios.
+ * Usa el repositorio IUserRepository para acceder y modificar los datos.
+ */
 public class UserService {
+
+    // Instancia del repositorio para manejar usuarios (interfaz y clase concreta)
     private final IUserRepository userRepo = new UserRepository();
 
     /**
-     * Valida un usuario con su nombre y contraseña.
-     * La encriptación ya se maneja en el repositorio, por eso no se hace aquí.
+     * Sección: Método validarUsuario
+     * Valida las credenciales de un usuario (usuario y contraseña).
+     * La encriptación de la contraseña se maneja en el repositorio.
      *
-     * @param usuario Nombre de usuario
+     * @param usuario Nombre de usuario en texto plano
      * @param contrasena Contraseña en texto plano
-     * @return Usuario si es válido, null si no
+     * @return Usuario si las credenciales son válidas, null si no
      */
     public Usuario validarUsuario(String usuario, String contrasena) {
+        // Llama al repositorio para validar el usuario y obtener el objeto Usuario
         return userRepo.validarUsuario(usuario, contrasena);
     }
 
     /**
-     * Registra un nuevo usuario si no existe uno con el mismo nombre.
+     * Sección: Método registrarUsuario
+     * Registra un nuevo usuario solo si no existe otro con el mismo nombre.
      *
-     * @param nuevoUsuario Objeto usuario a registrar
-     * @return true si se registró correctamente, false si el usuario ya existe
+     * @param nuevoUsuario Objeto Usuario con los datos a registrar
+     * @return true si se registró exitosamente, false si ya existe un usuario con ese nombre
      */
     public boolean registrarUsuario(Usuario nuevoUsuario) {
+        // Busca si ya existe un usuario con el mismo nombre
         Usuario existente = userRepo.buscarPorUsuario(nuevoUsuario.getUsuario());
+
         if (existente != null) {
-            return false; // Ya existe un usuario con ese nombre
+            // Si ya existe, no registra y retorna falso
+            return false;
         }
+
+        // Si no existe, llama al repositorio para registrar el nuevo usuario
         return userRepo.registrarUsuario(nuevoUsuario);
     }
 
     /**
-     * Obtiene la lista de todos los usuarios.
+     * Sección: Método obtenerTodosLosUsuarios
+     * Obtiene la lista completa de usuarios registrados.
      *
-     * @return lista de usuarios
+     * @return lista de todos los usuarios
      */
     public List<Usuario> obtenerTodosLosUsuarios() {
+        // Obtiene todos los usuarios desde el repositorio
         return userRepo.obtenerTodos();
     }
 
     /**
-     * Busca un usuario por su ID.
+     * Sección: Método buscarPorId
+     * Busca un usuario por su ID único.
      *
      * @param id ID del usuario
      * @return Usuario encontrado o null si no existe
      */
     public Usuario buscarPorId(int id) {
+        // Busca el usuario por su ID en el repositorio
         return userRepo.buscarPorId(id);
     }
 
     /**
-     * Actualiza un usuario existente.
+     * Sección: Método actualizarUsuario
+     * Actualiza la información de un usuario existente.
      *
-     * @param u Usuario con datos actualizados
-     * @return true si la actualización fue exitosa
+     * @param u Objeto Usuario con los datos actualizados
+     * @return true si la actualización fue exitosa, false en caso contrario
      */
     public boolean actualizarUsuario(Usuario u) {
+        // Llama al repositorio para actualizar los datos del usuario
         return userRepo.actualizarUsuario(u);
     }
 
     /**
-     * Elimina un usuario por su ID.
+     * Sección: Método eliminarUsuarioPorId
+     * Elimina un usuario identificado por su ID.
      *
      * @param id ID del usuario a eliminar
-     * @return true si se eliminó correctamente
+     * @return true si la eliminación fue exitosa, false si hubo error o no existe
      */
     public boolean eliminarUsuarioPorId(int id) {
+        // Llama al repositorio para eliminar el usuario
         return userRepo.eliminarUsuario(id);
     }
+
+    /*
+     * Impacto de modificaciones:
+     * Cambiar estos métodos puede afectar la lógica de validación,
+     * registro, actualización o eliminación de usuarios,
+     * por lo que debe hacerse con cuidado para no romper la integridad de los datos ni la seguridad.
+     */
 }

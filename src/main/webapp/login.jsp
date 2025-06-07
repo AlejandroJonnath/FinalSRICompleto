@@ -27,10 +27,10 @@
         usuarioPrevio = "";
       }
     %>
-    <input type="text" name="usuario" id="usuario" value="<%= usuarioPrevio %>" required/><br/>
+    <input type="text" name="usuario" id="usuario" value="<%= usuarioPrevio %>"/><br/>
 
     <label for="contrasena">Contraseña</label><br/>
-    <input type="password" name="contrasena" id="contrasena" required/><br/><br/>
+    <input type="password" name="contrasena" id="contrasena" /><br/><br/>
 
     <button type="submit">Entrar</button>
   </form>
@@ -59,10 +59,10 @@
     <form action="login" method="post">
       <input type="hidden" name="action" value="register" />
       <label for="usuarioRegister">Usuario</label><br/>
-      <input type="text" name="usuario" id="usuarioRegister" required/><br/>
+      <input type="text" name="usuario" id="usuarioRegister"/><br/>
 
       <label for="contrasenaRegister">Contraseña</label><br/>
-      <input type="password" name="contrasena" id="contrasenaRegister" required/><br/><br/>
+      <input type="password" name="contrasena" id="contrasenaRegister"/><br/><br/>
 
       <button type="submit">Registrar</button>
     </form>

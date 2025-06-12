@@ -39,7 +39,7 @@ public class DownloadInvoiceServlet extends HttpServlet {
         }
 
         // 2) Consultar cabecera de la factura (modelo actualizado)
-        String sqlFactura = "SELECT id, fecha, cliente_nombre, cliente_cedula, cliente_direccion, cliente_email, " +
+        String sqlFactura = "SELECT id, fecha, cliente_nombre, cliente_cedula, cliente_direccion, cliente_email, cliente_telefono, " +
                 "establecimiento, punto_emision, secuencial, clave_acceso, tipo_emision, total " +
                 "FROM factura WHERE id = ?";
 
@@ -51,7 +51,7 @@ public class DownloadInvoiceServlet extends HttpServlet {
 
         // Variables para cabecera
         Date fechaFactura = null;
-        String clienteNombre = "", clienteCedula = "", clienteDireccion = "", clienteEmail = "";
+        String clienteNombre = "", clienteCedula = "", clienteDireccion = "", clienteEmail = ""; String clienteTelefono = "";
         String establecimiento = "", puntoEmision = "", secuencial = "", claveAcceso = "", tipoEmision = "";
         double totalFactura = 0.0;
 
@@ -67,6 +67,7 @@ public class DownloadInvoiceServlet extends HttpServlet {
                     clienteCedula = rsFact.getString("cliente_cedula");
                     clienteDireccion = rsFact.getString("cliente_direccion");
                     clienteEmail = rsFact.getString("cliente_email");
+                    clienteTelefono = rsFact.getString("cliente_telefono");
                     establecimiento = rsFact.getString("establecimiento");
                     puntoEmision = rsFact.getString("punto_emision");
                     secuencial = rsFact.getString("secuencial");
@@ -128,6 +129,9 @@ public class DownloadInvoiceServlet extends HttpServlet {
 
             tablaCabecera.addCell(getCell("Email:", PdfPCell.ALIGN_LEFT, fontSubtitulo));
             tablaCabecera.addCell(getCell(clienteEmail, PdfPCell.ALIGN_LEFT, fontNormal));
+
+            tablaCabecera.addCell(getCell("Telefono:", PdfPCell.ALIGN_LEFT, fontSubtitulo));
+            tablaCabecera.addCell(getCell(clienteTelefono, PdfPCell.ALIGN_LEFT, fontNormal));
 
             tablaCabecera.addCell(getCell("Establecimiento:", PdfPCell.ALIGN_LEFT, fontSubtitulo));
             tablaCabecera.addCell(getCell(establecimiento, PdfPCell.ALIGN_LEFT, fontNormal));

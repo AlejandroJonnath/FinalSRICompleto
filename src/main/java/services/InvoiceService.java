@@ -48,7 +48,7 @@ public class InvoiceService {
             ps.setBigDecimal(5, detalle.getSubtotal());
             ps.setInt(6, detalle.getStock());
             ps.setBigDecimal(7, detalle.getDescuento());
-            ps.setBigDecimal(8, detalle.getIva());
+            ps.setBigDecimal(8, detalle.getIva()); // porcentaje: 12.00 o 15.00
 
             int filas = ps.executeUpdate();
             return filas > 0;

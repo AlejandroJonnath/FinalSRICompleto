@@ -18,6 +18,8 @@
     List<Map<String, Object>> items =
             (List<Map<String, Object>>) request.getAttribute("items");
     BigDecimal totalGeneral = (BigDecimal) request.getAttribute("totalGeneral");
+    BigDecimal totalIva = (BigDecimal) request.getAttribute("totalIva");
+    BigDecimal totalConIva = (BigDecimal) request.getAttribute("totalConIva");
 
     String mensajeError  = (String) request.getAttribute("mensajeError");
     String mensajeExito  = (String) request.getAttribute("mensajeExito");
@@ -46,6 +48,7 @@
         <th>Precio Unitario</th>
         <th>Cantidad</th>
         <th>Subtotal</th>
+        <th>Iva</th>
     </tr>
     </thead>
     <tbody>
@@ -55,12 +58,15 @@
                 Producto p = (Producto) item.get("producto");
                 Integer cantidad = (Integer) item.get("cantidad");
                 BigDecimal subtotal = (BigDecimal) item.get("subtotal");
+                BigDecimal iva = (BigDecimal) item.get("iva");
+
     %>
     <tr>
         <td><%= p.getNombre() %></td>
         <td>$ <%= p.getPrecio() %></td>
         <td><%= cantidad %></td>
         <td>$ <%= subtotal %></td>
+        <td>$ <%= String.format("%.2f", iva) %></td>
     </tr>
     <%
             }
@@ -69,8 +75,16 @@
     </tbody>
     <tfoot>
     <tr>
-        <th colspan="3">Total General</th>
-        <th>$ <%= (totalGeneral != null ? totalGeneral : BigDecimal.ZERO) %></th>
+        <th colspan="4" style="text-align: right;">Total sin IVA</th>
+        <th>$ <%= String.format("%.2f", (totalGeneral != null ? totalGeneral : BigDecimal.ZERO)) %></th>
+    </tr>
+    <tr>
+        <th colspan="4" style="text-align: right;">Total IVA</th>
+        <th>$ <%= String.format("%.2f", (totalIva != null ? totalIva : BigDecimal.ZERO)) %></th>
+    </tr>
+    <tr>
+        <th colspan="4" style="text-align: right;">TOTAL A PAGAR</th>
+        <th>$ <%= String.format("%.2f", (totalConIva != null ? totalConIva : BigDecimal.ZERO)) %></th>
     </tr>
     </tfoot>
 </table>
@@ -83,6 +97,15 @@
 
         <label for="clienteCedula">Cédula:</label><br/>
         <input type="text" name="clienteCedula" id="clienteCedula" required /><br/>
+
+        <label for="clienteDirección">Dirección:</label><br/>
+        <input type="text" name="clienteDireccion" id="clienteDireccion" required /><br/>
+
+        <label for="clienteTelefono">Telefono:</label><br/>
+        <input type="text" name="clienteTelefono" id="clienteTelefono" required /><br/>
+
+        <label for="clienteCorreo">Correo:</label><br/>
+        <input type="text" name="clienteEmail" id="clienteEmail" required /><br/>
 
         <button type="submit" class="btn btn-checkout">Realizar Pago</button>
     </form>

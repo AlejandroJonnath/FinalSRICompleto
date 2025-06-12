@@ -24,6 +24,7 @@ public class FacturaRepositoryImple implements FacturaRepository {
                 f.setClienteCedula(rs.getString("cliente_cedula"));
                 f.setClienteDireccion(rs.getString("cliente_direccion"));
                 f.setClienteEmail(rs.getString("cliente_email"));
+                f.setClienteTelefono(rs.getString("cliente_telefono"));
                 f.setEstablecimiento(rs.getString("establecimiento"));
                 f.setPuntoEmision(rs.getString("punto_emision"));
                 f.setSecuencial(rs.getString("secuencial"));
@@ -53,6 +54,7 @@ public class FacturaRepositoryImple implements FacturaRepository {
                     f.setClienteCedula(rs.getString("cliente_cedula"));
                     f.setClienteDireccion(rs.getString("cliente_direccion"));
                     f.setClienteEmail(rs.getString("cliente_email"));
+                    f.setClienteTelefono(rs.getString("cliente_telefono"));
                     f.setEstablecimiento(rs.getString("establecimiento"));
                     f.setPuntoEmision(rs.getString("punto_emision"));
                     f.setSecuencial(rs.getString("secuencial"));
@@ -70,8 +72,8 @@ public class FacturaRepositoryImple implements FacturaRepository {
 
     @Override
     public int insertar(Factura factura) {
-        String sql = "INSERT INTO factura (fecha, cliente_nombre, cliente_cedula, cliente_direccion, cliente_email, establecimiento, punto_emision, secuencial, clave_acceso, tipo_emision, total) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO factura (fecha, cliente_nombre, cliente_cedula, cliente_direccion, cliente_email, cliente_Telefono, establecimiento, punto_emision, secuencial, clave_acceso, tipo_emision, total) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         ResultSet rs = null;
         try (Connection conn = Conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -81,12 +83,13 @@ public class FacturaRepositoryImple implements FacturaRepository {
             ps.setString(3, factura.getClienteCedula());
             ps.setString(4, factura.getClienteDireccion());
             ps.setString(5, factura.getClienteEmail());
-            ps.setString(6, factura.getEstablecimiento());
-            ps.setString(7, factura.getPuntoEmision());
-            ps.setString(8, factura.getSecuencial());
-            ps.setString(9, factura.getClaveAcceso());
-            ps.setString(10, factura.getTipoEmision());
-            ps.setBigDecimal(11, factura.getTotal());
+            ps.setString(6, factura.getClienteTelefono());
+            ps.setString(7, factura.getEstablecimiento());
+            ps.setString(8, factura.getPuntoEmision());
+            ps.setString(9, factura.getSecuencial());
+            ps.setString(10, factura.getClaveAcceso());
+            ps.setString(11, factura.getTipoEmision());
+            ps.setBigDecimal(12, factura.getTotal());
 
             int filas = ps.executeUpdate();
             if (filas == 0) return -1;

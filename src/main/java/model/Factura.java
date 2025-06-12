@@ -11,6 +11,7 @@ public class Factura {
     private String clienteCedula;
     private String clienteDireccion;
     private String clienteEmail;
+    private String clienteTelefono;
     private String establecimiento;
     private String puntoEmision;
     private String secuencial;
@@ -22,13 +23,14 @@ public class Factura {
 
     }
 
-    public Factura(int id, Date fecha, String clienteNombre, String clienteCedula, String clienteDireccion, String clienteEmail, String establecimiento, String puntoEmision, String secuencial, String claveAcceso, String tipoEmision, BigDecimal total) {
+    public Factura(int id, Date fecha, String clienteNombre, String clienteCedula, String clienteDireccion, String clienteEmail, String clienteTelefono, String establecimiento, String puntoEmision, String secuencial, String claveAcceso, String tipoEmision, BigDecimal total) {
         this.id = id;
         this.fecha = fecha;
         this.clienteNombre = clienteNombre;
         this.clienteCedula = clienteCedula;
         this.clienteDireccion = clienteDireccion;
         this.clienteEmail = clienteEmail;
+        this.clienteTelefono = clienteTelefono;
         this.establecimiento = establecimiento;
         this.puntoEmision = puntoEmision;
         this.secuencial = secuencial;
@@ -86,6 +88,10 @@ public class Factura {
     public void setClienteEmail(String clienteEmail) {
         this.clienteEmail = clienteEmail;
     }
+
+    public String getClienteTelefono() {return clienteTelefono; }
+
+    public void setClienteTelefono(String clienteTelefono) {this.clienteTelefono = clienteTelefono; }
 
     public String getEstablecimiento() {
         return establecimiento;

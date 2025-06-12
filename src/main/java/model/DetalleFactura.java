@@ -12,7 +12,8 @@ public class DetalleFactura {
     private BigDecimal subtotal;
     private int stock;
     private BigDecimal descuento;
-    private BigDecimal iva;
+    private BigDecimal iva;        // porcentaje (%), por ejemplo 15.00
+    private BigDecimal ivaValor;   // valor en $ → lo que se muestra al cliente
 
     // Constructor vacío
     public DetalleFactura() {
@@ -20,7 +21,7 @@ public class DetalleFactura {
 
     // Constructor completo (sin id)
     public DetalleFactura(Factura factura, Producto producto, int cantidad, BigDecimal precioUnitario, BigDecimal subtotal,
-                          int stock, BigDecimal descuento, BigDecimal iva) {
+                          int stock, BigDecimal descuento, BigDecimal iva, BigDecimal ivaValor) {
         this.factura = factura;
         this.producto = producto;
         this.cantidad = cantidad;
@@ -29,6 +30,7 @@ public class DetalleFactura {
         this.stock = stock;
         this.descuento = descuento;
         this.iva = iva;
+        this.ivaValor = ivaValor;
     }
 
     // Getters y Setters
@@ -103,5 +105,13 @@ public class DetalleFactura {
 
     public void setIva(BigDecimal iva) {
         this.iva = iva;
+    }
+
+    public BigDecimal getIvaValor() {
+        return ivaValor;
+    }
+
+    public void setIvaValor(BigDecimal ivaValor) {
+        this.ivaValor = ivaValor;
     }
 }

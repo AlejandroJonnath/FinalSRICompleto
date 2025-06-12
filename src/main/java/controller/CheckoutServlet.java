@@ -39,6 +39,9 @@ public class    CheckoutServlet extends HttpServlet { // Declara la clase que ex
 
         String clienteNombre = request.getParameter("clienteNombre"); // Obtiene el nombre del cliente
         String clienteCedula = request.getParameter("clienteCedula"); // Obtiene la cédula del cliente
+        String clienteDireccion = request.getParameter("clienteDireccion");
+        String clienteTelefono = request.getParameter("clienteTelefono");
+        String clienteEmail = request.getParameter("clienteEmail");
 
         // Recalcular total general
         BigDecimal totalGeneral = BigDecimal.ZERO; // Inicializa el total en cero
@@ -57,6 +60,9 @@ public class    CheckoutServlet extends HttpServlet { // Declara la clase que ex
         factura.setFecha(new Date()); // ← AQUÍ pones la fecha actual para que no te dé error
         factura.setClienteNombre(clienteNombre); // Asigna el nombre del cliente
         factura.setClienteCedula(clienteCedula); // Asigna la cédula del cliente
+        factura.setClienteDireccion(clienteDireccion);
+        factura.setClienteEmail(clienteEmail);
+        factura.setClienteTelefono(clienteTelefono); // <--- Este método debes tenerlo implementado
         factura.setTotal(totalGeneral); // Asigna el total calculado
         factura.setEstablecimiento("001");
         factura.setPuntoEmision("001");
@@ -77,8 +83,7 @@ public class    CheckoutServlet extends HttpServlet { // Declara la clase que ex
         ));
 
         factura.setTipoEmision("1");
-        factura.setClienteDireccion("Dirección no especificada");
-        factura.setClienteEmail("cliente@correo.com");
+
         int facturaId = invoiceService.insertarFactura(factura); // Inserta la factura y devuelve su ID
         if (facturaId == -1) { // Si hubo un error al insertar
             request.setAttribute("mensajeError", "Error al procesar la factura."); // Define mensaje de error
@@ -88,6 +93,7 @@ public class    CheckoutServlet extends HttpServlet { // Declara la clase que ex
 
         // Insertar los detalles de factura y reducir stock
         boolean todoBien = true;
+        BigDecimal porcentajeIva = new BigDecimal("0.15");
         for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
             int productoId = entry.getKey();
             int cantidad = entry.getValue();
@@ -97,8 +103,7 @@ public class    CheckoutServlet extends HttpServlet { // Declara la clase que ex
                 BigDecimal subtotal = precioUnitario.multiply(new BigDecimal(cantidad));
 
                 // ------ NUEVO: calcular IVA (15%) ------
-                BigDecimal porcentajeIva = new BigDecimal("0.15");
-                BigDecimal iva = subtotal.multiply(porcentajeIva);
+                BigDecimal ivaValor = subtotal.multiply(porcentajeIva);
 
                 // ------ NUEVO: asignar descuento (si no hay, se pone 0.00) ------
                 BigDecimal descuento = BigDecimal.ZERO;
@@ -117,7 +122,8 @@ public class    CheckoutServlet extends HttpServlet { // Declara la clase que ex
                 detalle.setSubtotal(subtotal);
 
                 // ------ NUEVO: setear IVA, descuento y stock ------
-                detalle.setIva(iva);
+                detalle.setIva(new BigDecimal("15.00")); // más claro y seguro
+                detalle.setIvaValor(ivaValor); // valor en $
                 detalle.setDescuento(descuento);
                 detalle.setStock(p.getStock()); // se guarda el stock actual del producto
 

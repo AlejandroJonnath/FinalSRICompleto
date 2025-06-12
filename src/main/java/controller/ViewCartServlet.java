@@ -31,25 +31,39 @@ public class ViewCartServlet extends HttpServlet { // Clase que extiende HttpSer
 
         List<Map<String, Object>> items = new ArrayList<>(); // Lista para almacenar detalles de cada ítem
         BigDecimal totalGeneral = BigDecimal.ZERO; // Inicializa el total general en cero
+        BigDecimal totalIva = BigDecimal.ZERO;
 
-        for (Map.Entry<Integer, Integer> entry : cart.entrySet()) { // Recorre cada entrada del carrito
-            int productoId = entry.getKey(); // Obtiene el ID del producto
-            int cantidad = entry.getValue(); // Obtiene la cantidad solicitada
-            Producto p = productService.obtenerPorId(productoId); // Obtiene el producto desde el servicio
-            if (p != null) { // Si el producto existe
-                BigDecimal subtotal = p.getPrecio().multiply(new BigDecimal(cantidad)); // Calcula subtotal
-                totalGeneral = totalGeneral.add(subtotal); // Acumula en el total general
+        BigDecimal porcentajeIva = new BigDecimal("0.15");
 
-                Map<String, Object> item = new HashMap<>(); // Crea un mapa para los datos del ítem
-                item.put("producto", p); // Añade el objeto producto
-                item.put("cantidad", cantidad); // Añade la cantidad
-                item.put("subtotal", subtotal); // Añade el subtotal
-                items.add(item); // Agrega el ítem a la lista
+
+        for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
+            int productoId = entry.getKey();
+            int cantidad = entry.getValue();
+            Producto p = productService.obtenerPorId(productoId);
+            if (p != null) {
+                BigDecimal subtotal = p.getPrecio().multiply(new BigDecimal(cantidad));
+                BigDecimal ivaProducto = subtotal.multiply(porcentajeIva);
+
+                totalGeneral = totalGeneral.add(subtotal);
+                totalIva = totalIva.add(ivaProducto);
+
+                Map<String, Object> item = new HashMap<>();
+                item.put("producto", p);
+                item.put("cantidad", cantidad);
+                item.put("subtotal", subtotal);
+                item.put("iva", ivaProducto); //
+
+                items.add(item);
             }
         }
 
-        request.setAttribute("items", items); // Añade la lista de ítems como atributo de la petición
-        request.setAttribute("totalGeneral", totalGeneral); // Añade el total general como atributo
-        request.getRequestDispatcher("cart.jsp").forward(request, response); // Reenvía a la JSP del carrito
+        BigDecimal totalConIva = totalGeneral.add(totalIva);
+
+        request.setAttribute("items", items);
+        request.setAttribute("totalGeneral", totalGeneral);
+        request.setAttribute("totalIva", totalIva);
+        request.setAttribute("totalConIva", totalConIva);
+
+        request.getRequestDispatcher("cart.jsp").forward(request, response);
     }
 }

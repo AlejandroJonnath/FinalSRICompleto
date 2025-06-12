@@ -8,13 +8,15 @@ import model.Factura; // Importa la clase Factura del modelo
 import model.Producto; // Importa la clase Producto del modelo
 import services.InvoiceService; // Importa el servicio que maneja facturas
 import services.ProductService; // Importa el servicio que maneja productos
+import util.ClaveAccesoUtil;
 
 import java.io.IOException; // Importa la excepción IOException
 import java.math.BigDecimal; // Importa BigDecimal para cálculos de dinero
+import java.util.Date;
 import java.util.Map; // Importa la interfaz Map para colecciones clave-valor
 
 @WebServlet("/checkout") // Mapea este servlet a la URL “/checkout”
-public class CheckoutServlet extends HttpServlet { // Declara la clase que extiende HttpServlet
+public class    CheckoutServlet extends HttpServlet { // Declara la clase que extiende HttpServlet
     private final InvoiceService invoiceService = new InvoiceService(); // Instancia el servicio de facturas
     private final ProductService productService = new ProductService(); // Instancia el servicio de productos
 
@@ -52,10 +54,31 @@ public class CheckoutServlet extends HttpServlet { // Declara la clase que extie
 
         // Insertar factura
         Factura factura = new Factura(); // Crea una nueva factura
+        factura.setFecha(new Date()); // ← AQUÍ pones la fecha actual para que no te dé error
         factura.setClienteNombre(clienteNombre); // Asigna el nombre del cliente
         factura.setClienteCedula(clienteCedula); // Asigna la cédula del cliente
         factura.setTotal(totalGeneral); // Asigna el total calculado
+        factura.setEstablecimiento("001");
+        factura.setPuntoEmision("001");
 
+        String siguienteSecuencial = invoiceService.obtenerSiguienteSecuencial("001", "001");
+        factura.setSecuencial(siguienteSecuencial);
+
+        factura.setClaveAcceso(ClaveAccesoUtil.generarClaveAcceso(
+                "02062025", // usar date actual formateada idealmente
+                "01", // tipoComprobante
+                "1719284752001", // RUC empresa
+                "1", // ambiente
+                "001",
+                "001",
+                siguienteSecuencial,
+                ClaveAccesoUtil.generarCodigoNumerico(),
+                "1" // tipoEmision
+        ));
+
+        factura.setTipoEmision("1");
+        factura.setClienteDireccion("Dirección no especificada");
+        factura.setClienteEmail("cliente@correo.com");
         int facturaId = invoiceService.insertarFactura(factura); // Inserta la factura y devuelve su ID
         if (facturaId == -1) { // Si hubo un error al insertar
             request.setAttribute("mensajeError", "Error al procesar la factura."); // Define mensaje de error
@@ -63,29 +86,50 @@ public class CheckoutServlet extends HttpServlet { // Declara la clase que extie
             return; // Termina la ejecución
         }
 
-        // Insertar los detalles y reducir stock
-        boolean todoBien = true; // Indicador de éxito para todos los detalles
-        for (Map.Entry<Integer, Integer> entry : cart.entrySet()) { // Recorre cada entrada del carrito
-            int productoId = entry.getKey(); // ID del producto
-            int cantidad = entry.getValue(); // Cantidad comprada
-            Producto p = productService.obtenerPorId(productoId); // Obtiene el producto por su ID
-            if (p != null) { // Si el producto existe
-                BigDecimal precioUnitario = p.getPrecio(); // Obtiene el precio unitario
-                BigDecimal subtotal = precioUnitario.multiply(new BigDecimal(cantidad)); // Calcula subtotal
+        // Insertar los detalles de factura y reducir stock
+        boolean todoBien = true;
+        for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
+            int productoId = entry.getKey();
+            int cantidad = entry.getValue();
+            Producto p = productService.obtenerPorId(productoId);
+            if (p != null) {
+                BigDecimal precioUnitario = p.getPrecio();
+                BigDecimal subtotal = precioUnitario.multiply(new BigDecimal(cantidad));
 
-                DetalleFactura detalle = new DetalleFactura(); // Crea un nuevo detalle de factura
-                detalle.setFacturaId(facturaId); // Asigna el ID de la factura
-                detalle.setProductoId(productoId); // Asigna el ID del producto
-                detalle.setCantidad(cantidad); // Asigna la cantidad
-                detalle.setPrecioUnitario(precioUnitario); // Asigna el precio unitario
-                detalle.setSubtotal(subtotal); // Asigna el subtotal
+                // ------ NUEVO: calcular IVA (15%) ------
+                BigDecimal porcentajeIva = new BigDecimal("0.15");
+                BigDecimal iva = subtotal.multiply(porcentajeIva);
 
-                boolean okDetalle = invoiceService.insertarDetalle(detalle); // Inserta el detalle en la base
-                boolean okStock = invoiceService.reducirStock(productoId, cantidad); // Reduce el stock del producto
+                // ------ NUEVO: asignar descuento (si no hay, se pone 0.00) ------
+                BigDecimal descuento = BigDecimal.ZERO;
 
-                if (!okDetalle || !okStock) { // Si falla alguno de los dos
-                    todoBien = false; // Marca el proceso como fallido
-                    break; // Sale del bucle
+                // Crear detalle de factura
+                DetalleFactura detalle = new DetalleFactura();
+                factura.setId(facturaId); // importante: asignar id generado de factura
+                detalle.setFactura(factura);
+
+                Producto producto = new Producto();
+                producto.setId(productoId);
+                detalle.setProducto(producto);
+
+                detalle.setCantidad(cantidad);
+                detalle.setPrecioUnitario(precioUnitario);
+                detalle.setSubtotal(subtotal);
+
+                // ------ NUEVO: setear IVA, descuento y stock ------
+                detalle.setIva(iva);
+                detalle.setDescuento(descuento);
+                detalle.setStock(p.getStock()); // se guarda el stock actual del producto
+
+                // Insertar detalle en base
+                boolean okDetalle = invoiceService.insertarDetalle(detalle);
+
+                // Reducir el stock del producto
+                boolean okStock = invoiceService.reducirStock(productoId, cantidad);
+
+                if (!okDetalle || !okStock) {
+                    todoBien = false;
+                    break;
                 }
             }
         }

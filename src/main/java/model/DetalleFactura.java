@@ -3,49 +3,64 @@ package model;
 import java.math.BigDecimal;
 
 public class DetalleFactura {
+
     private int id;
-    private int facturaId;
-    private int productoId;
+    private Factura factura;     // Relación a Factura
+    private Producto producto;   // Relación a Producto
     private int cantidad;
     private BigDecimal precioUnitario;
     private BigDecimal subtotal;
+    private int stock;
+    private BigDecimal descuento;
+    private BigDecimal iva;
 
-    public DetalleFactura() { }
+    // Constructor vacío
+    public DetalleFactura() {
+    }
 
-    public DetalleFactura(int id, int facturaId, int productoId, int cantidad, BigDecimal precioUnitario, BigDecimal subtotal) {
-        this.id = id;
-        this.facturaId = facturaId;
-        this.productoId = productoId;
+    // Constructor completo (sin id)
+    public DetalleFactura(Factura factura, Producto producto, int cantidad, BigDecimal precioUnitario, BigDecimal subtotal,
+                          int stock, BigDecimal descuento, BigDecimal iva) {
+        this.factura = factura;
+        this.producto = producto;
         this.cantidad = cantidad;
         this.precioUnitario = precioUnitario;
         this.subtotal = subtotal;
+        this.stock = stock;
+        this.descuento = descuento;
+        this.iva = iva;
     }
 
-    // Getters y setters
+    // Getters y Setters
+
     public int getId() {
         return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }
 
-    public int getFacturaId() {
-        return facturaId;
-    }
-    public void setFacturaId(int facturaId) {
-        this.facturaId = facturaId;
+    public Factura getFactura() {
+        return factura;
     }
 
-    public int getProductoId() {
-        return productoId;
+    public void setFactura(Factura factura) {
+        this.factura = factura;
     }
-    public void setProductoId(int productoId) {
-        this.productoId = productoId;
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
 
     public int getCantidad() {
         return cantidad;
     }
+
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
@@ -53,6 +68,7 @@ public class DetalleFactura {
     public BigDecimal getPrecioUnitario() {
         return precioUnitario;
     }
+
     public void setPrecioUnitario(BigDecimal precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
@@ -60,7 +76,32 @@ public class DetalleFactura {
     public BigDecimal getSubtotal() {
         return subtotal;
     }
+
     public void setSubtotal(BigDecimal subtotal) {
         this.subtotal = subtotal;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public BigDecimal getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(BigDecimal descuento) {
+        this.descuento = descuento;
+    }
+
+    public BigDecimal getIva() {
+        return iva;
+    }
+
+    public void setIva(BigDecimal iva) {
+        this.iva = iva;
     }
 }

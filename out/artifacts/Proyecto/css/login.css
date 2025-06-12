@@ -1,0 +1,189 @@
+/* login.css */
+
+/* Reset básico */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Fondo general y centrado */
+body {
+    background-color: #f9f9f9;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+}
+
+/* Contenedor principal */
+.login-container {
+    background-color: white;
+    padding: 2.5rem 3rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(41, 128, 185, 0.3); /* sombra azul suave */
+    width: 360px;
+    text-align: center;
+    position: relative;
+}
+
+/* Título */
+.login-container h2 {
+    margin-bottom: 1.5rem;
+    color: #2980b9; /* azul principal */
+    font-weight: 700;
+    font-size: 1.9rem;
+    letter-spacing: 1px;
+}
+
+/* Mensajes de error y éxito */
+.error, .success {
+    margin-bottom: 1rem;
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
+}
+
+.error {
+    background-color: #f8d7da;
+    color: #c0392b;
+    border: 1px solid #c0392b;
+}
+
+.success {
+    background-color: #d4edda;
+    color: #27ae60;
+    border: 1px solid #27ae60;
+}
+
+/* Formularios */
+form {
+    text-align: left;
+}
+
+/* Etiquetas */
+label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+    color: #34495e;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 0.6rem 0.85rem;
+    margin-bottom: 1.3rem;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #2980b9;
+    outline: none;
+    box-shadow: 0 0 8px rgba(41, 128, 185, 0.4);
+}
+
+/* Botón submit */
+button[type="submit"] {
+    width: 100%;
+    padding: 0.65rem 0;
+    background-color: #2980b9;
+    color: white;
+    font-weight: 700;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.15rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 0.5rem;
+}
+
+button[type="submit"]:hover {
+    background-color: #1c5980;
+}
+
+/* Botón pequeño para abrir modal */
+.btn-small {
+    display: block;
+    margin-left: auto;
+    margin-top: 1.2rem;
+    background-color: transparent;
+    border: 2px solid #2980b9;
+    color: #2980b9;
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: fit-content;
+}
+
+.btn-small:hover {
+    background-color: #2980b9;
+    color: white;
+    border-color: #1c5980;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.45);
+    backdrop-filter: blur(2.5px);
+}
+
+/* Contenido del modal */
+.modal-content {
+    background-color: white;
+    margin: 8% auto;
+    padding: 2rem 2.5rem;
+    border-radius: 10px;
+    width: 380px;
+    position: relative;
+    box-shadow: 0 4px 18px rgba(41, 128, 185, 0.35);
+}
+
+/* Botón cerrar modal */
+.close-btn {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2980b9;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+    color: #1c5980;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .login-container,
+    .modal-content {
+        width: 90%;
+        padding: 1.5rem 2rem;
+    }
+
+    button[type="submit"] {
+        font-size: 1rem;
+    }
+}

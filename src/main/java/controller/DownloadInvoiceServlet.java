@@ -22,7 +22,8 @@ public class DownloadInvoiceServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // 1) Leer el parámetro invoiceId
+
+        // 1) Leer parámetro invoiceId
         String invoiceIdParam = request.getParameter("invoiceId");
         if (invoiceIdParam == null) {
             response.sendRedirect("productos");
@@ -37,22 +38,24 @@ public class DownloadInvoiceServlet extends HttpServlet {
             return;
         }
 
-        // 2) Consultar la cabecera de la factura
-        String sqlFactura = "SELECT id, fecha, cliente_nombre, cliente_cedula, total FROM facturas WHERE id = ?";
-        // 3) Consultar los detalles: nombre, marca, precio_unitario, cantidad, subtotal
-        String sqlDetalles =
-                "SELECT p.nombre, p.marca, df.precio_unitario, df.cantidad, df.subtotal " +
-                        "FROM detalle_factura df " +
-                        "JOIN productos p ON df.producto_id = p.id " +
-                        "WHERE df.factura_id = ?";
+        // 2) Consultar cabecera de la factura (modelo actualizado)
+        String sqlFactura = "SELECT id, fecha, cliente_nombre, cliente_cedula, cliente_direccion, cliente_email, " +
+                "establecimiento, punto_emision, secuencial, clave_acceso, tipo_emision, total " +
+                "FROM factura WHERE id = ?";
 
-        // Variables para almacenar datos de la consulta
+        // 3) Consultar los detalles (modelo actualizado con iva y descuento)
+        String sqlDetalles = "SELECT p.nombre, p.marca, df.precio_unitario, df.cantidad, df.subtotal, df.descuento, df.iva " +
+                "FROM detalle_factura df " +
+                "JOIN productos p ON df.producto_id = p.id " +
+                "WHERE df.factura_id = ?";
+
+        // Variables para cabecera
         Date fechaFactura = null;
-        String clienteNombre = "";
-        String clienteCedula = "";
+        String clienteNombre = "", clienteCedula = "", clienteDireccion = "", clienteEmail = "";
+        String establecimiento = "", puntoEmision = "", secuencial = "", claveAcceso = "", tipoEmision = "";
         double totalFactura = 0.0;
 
-        // Primera conexión: obtener datos de la cabecera
+        // Leer cabecera
         try (Connection conn = Conexion.getConnection();
              PreparedStatement psFact = conn.prepareStatement(sqlFactura)) {
 
@@ -62,85 +65,109 @@ public class DownloadInvoiceServlet extends HttpServlet {
                     fechaFactura = rsFact.getTimestamp("fecha");
                     clienteNombre = rsFact.getString("cliente_nombre");
                     clienteCedula = rsFact.getString("cliente_cedula");
+                    clienteDireccion = rsFact.getString("cliente_direccion");
+                    clienteEmail = rsFact.getString("cliente_email");
+                    establecimiento = rsFact.getString("establecimiento");
+                    puntoEmision = rsFact.getString("punto_emision");
+                    secuencial = rsFact.getString("secuencial");
+                    claveAcceso = rsFact.getString("clave_acceso");
+                    tipoEmision = rsFact.getString("tipo_emision");
                     totalFactura = rsFact.getDouble("total");
                 } else {
-                    // Si no existe la factura, redirigir a productos
                     response.sendRedirect("productos");
                     return;
                 }
             }
         } catch (SQLException e) {
-            throw new ServletException("Error al leer datos de facturas: " + e.getMessage(), e);
+            throw new ServletException("Error al leer datos de factura: " + e.getMessage(), e);
         }
 
-        // 4) Preparar la respuesta HTTP para un PDF
+        // 4) Preparar respuesta HTTP para PDF
         response.setContentType("application/pdf");
-        // Forzar descarga con nombre "factura_<invoiceId>.pdf"
         response.setHeader("Content-Disposition", "attachment; filename=\"factura_" + invoiceId + ".pdf\"");
 
-        // 5) Construir el PDF con iText
+        // 5) Generar PDF con iText
         try {
             Document document = new Document(PageSize.A4, 36, 36, 54, 36);
             PdfWriter.getInstance(document, response.getOutputStream());
             document.open();
 
-            // Fuente estándar
             Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
             Font fontSubtitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
             Font fontNormal = FontFactory.getFont(FontFactory.HELVETICA, 11);
 
-            // --- A) Agregar encabezado de factura ---
+            // --- A) Encabezado factura ---
             Paragraph titulo = new Paragraph("Mimir Petshop - FACTURA", fontTitulo);
             titulo.setAlignment(Element.ALIGN_CENTER);
             document.add(titulo);
-
             document.add(Chunk.NEWLINE);
 
-            // Información de cabecera
+            // Tabla de cabecera
             PdfPTable tablaCabecera = new PdfPTable(2);
             tablaCabecera.setWidthPercentage(100);
             tablaCabecera.setWidths(new int[]{1, 2});
 
-            // Fila 1: ID factura
+            // Datos principales
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String fechaStr = (fechaFactura != null) ? sdf.format(fechaFactura) : "";
+
             tablaCabecera.addCell(getCell("ID Factura:", PdfPCell.ALIGN_LEFT, fontSubtitulo));
             tablaCabecera.addCell(getCell(String.valueOf(invoiceId), PdfPCell.ALIGN_LEFT, fontNormal));
 
-            // Fila 2: Fecha
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String fechaStr = (fechaFactura != null) ? sdf.format(fechaFactura) : "";
             tablaCabecera.addCell(getCell("Fecha:", PdfPCell.ALIGN_LEFT, fontSubtitulo));
             tablaCabecera.addCell(getCell(fechaStr, PdfPCell.ALIGN_LEFT, fontNormal));
 
-            // Fila 3: Nombre cliente
             tablaCabecera.addCell(getCell("Cliente:", PdfPCell.ALIGN_LEFT, fontSubtitulo));
             tablaCabecera.addCell(getCell(clienteNombre, PdfPCell.ALIGN_LEFT, fontNormal));
 
-            // Fila 4: Cédula
             tablaCabecera.addCell(getCell("Cédula:", PdfPCell.ALIGN_LEFT, fontSubtitulo));
             tablaCabecera.addCell(getCell(clienteCedula, PdfPCell.ALIGN_LEFT, fontNormal));
+
+            tablaCabecera.addCell(getCell("Dirección:", PdfPCell.ALIGN_LEFT, fontSubtitulo));
+            tablaCabecera.addCell(getCell(clienteDireccion, PdfPCell.ALIGN_LEFT, fontNormal));
+
+            tablaCabecera.addCell(getCell("Email:", PdfPCell.ALIGN_LEFT, fontSubtitulo));
+            tablaCabecera.addCell(getCell(clienteEmail, PdfPCell.ALIGN_LEFT, fontNormal));
+
+            tablaCabecera.addCell(getCell("Establecimiento:", PdfPCell.ALIGN_LEFT, fontSubtitulo));
+            tablaCabecera.addCell(getCell(establecimiento, PdfPCell.ALIGN_LEFT, fontNormal));
+
+            tablaCabecera.addCell(getCell("Punto Emisión:", PdfPCell.ALIGN_LEFT, fontSubtitulo));
+            tablaCabecera.addCell(getCell(puntoEmision, PdfPCell.ALIGN_LEFT, fontNormal));
+
+            tablaCabecera.addCell(getCell("Secuencial:", PdfPCell.ALIGN_LEFT, fontSubtitulo));
+            tablaCabecera.addCell(getCell(secuencial, PdfPCell.ALIGN_LEFT, fontNormal));
+
+            tablaCabecera.addCell(getCell("Clave Acceso:", PdfPCell.ALIGN_LEFT, fontSubtitulo));
+            tablaCabecera.addCell(getCell(claveAcceso, PdfPCell.ALIGN_LEFT, fontNormal));
+
+            tablaCabecera.addCell(getCell("Tipo Emisión:", PdfPCell.ALIGN_LEFT, fontSubtitulo));
+            tablaCabecera.addCell(getCell(tipoEmision, PdfPCell.ALIGN_LEFT, fontNormal));
 
             document.add(tablaCabecera);
             document.add(Chunk.NEWLINE);
 
-            // --- B) Agregar tabla con detalles ---
+            // --- B) Detalle de productos ---
             Paragraph subtitulo = new Paragraph("Detalle de Productos", fontSubtitulo);
             subtitulo.setAlignment(Element.ALIGN_LEFT);
             document.add(subtitulo);
             document.add(Chunk.NEWLINE);
 
-            // Columnas: Producto, Marca, Precio Unitario, Cantidad, Subtotal
-            PdfPTable tablaDetalles = new PdfPTable(5);
+            // Tabla de detalles: con iva y descuento
+            PdfPTable tablaDetalles = new PdfPTable(7);
             tablaDetalles.setWidthPercentage(100);
-            tablaDetalles.setWidths(new int[]{3, 2, 2, 1, 2});
+            tablaDetalles.setWidths(new int[]{3, 2, 2, 1, 2, 2, 2});
 
-            // Encabezados de columna
+            // Encabezados
             tablaDetalles.addCell(getCell("Producto", PdfPCell.ALIGN_CENTER, fontSubtitulo));
             tablaDetalles.addCell(getCell("Marca", PdfPCell.ALIGN_CENTER, fontSubtitulo));
             tablaDetalles.addCell(getCell("Precio Unit.", PdfPCell.ALIGN_CENTER, fontSubtitulo));
             tablaDetalles.addCell(getCell("Cant.", PdfPCell.ALIGN_CENTER, fontSubtitulo));
             tablaDetalles.addCell(getCell("Subtotal", PdfPCell.ALIGN_CENTER, fontSubtitulo));
+            tablaDetalles.addCell(getCell("Descuento", PdfPCell.ALIGN_CENTER, fontSubtitulo));
+            tablaDetalles.addCell(getCell("IVA", PdfPCell.ALIGN_CENTER, fontSubtitulo));
 
-            // Llenar filas desde la BD
+            // Leer detalles
             try (Connection conn = Conexion.getConnection();
                  PreparedStatement psDet = conn.prepareStatement(sqlDetalles)) {
 
@@ -152,12 +179,16 @@ public class DownloadInvoiceServlet extends HttpServlet {
                         double precioUnit = rsDet.getDouble("precio_unitario");
                         int cantidad = rsDet.getInt("cantidad");
                         double subtotal = rsDet.getDouble("subtotal");
+                        double descuento = rsDet.getDouble("descuento");
+                        double iva = rsDet.getDouble("iva");
 
                         tablaDetalles.addCell(getCell(nombreProd, PdfPCell.ALIGN_LEFT, fontNormal));
                         tablaDetalles.addCell(getCell(marcaProd, PdfPCell.ALIGN_LEFT, fontNormal));
                         tablaDetalles.addCell(getCell(String.format("$ %.2f", precioUnit), PdfPCell.ALIGN_RIGHT, fontNormal));
                         tablaDetalles.addCell(getCell(String.valueOf(cantidad), PdfPCell.ALIGN_CENTER, fontNormal));
                         tablaDetalles.addCell(getCell(String.format("$ %.2f", subtotal), PdfPCell.ALIGN_RIGHT, fontNormal));
+                        tablaDetalles.addCell(getCell(String.format("$ %.2f", descuento), PdfPCell.ALIGN_RIGHT, fontNormal));
+                        tablaDetalles.addCell(getCell(String.format("$ %.2f", iva), PdfPCell.ALIGN_RIGHT, fontNormal));
                     }
                 }
             }
@@ -165,7 +196,7 @@ public class DownloadInvoiceServlet extends HttpServlet {
             document.add(tablaDetalles);
             document.add(Chunk.NEWLINE);
 
-            // --- C) Agregar total general al final ---
+            // --- C) Total general ---
             Paragraph lineaTotal = new Paragraph(String.format("TOTAL GENERAL: $ %.2f", totalFactura), fontSubtitulo);
             lineaTotal.setAlignment(Element.ALIGN_RIGHT);
             document.add(lineaTotal);

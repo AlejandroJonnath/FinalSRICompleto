@@ -1,0 +1,198 @@
+/* Fuente moderna, amigable y legible */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f0f4f8;
+    margin: 0;
+    padding: 0;
+}
+
+/* Barra superior */
+.top-bar {
+    width: 90%;
+    margin: 20px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 12px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Botones de sesión/carrito */
+.top-bar > div:last-child {
+    display: flex;
+    gap: 12px;
+}
+
+/* Estilo base para botones */
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+/* Colores amigables para cada tipo de botón */
+.btn-comprar {
+    background-color: #4caf93;
+    color: white;
+}
+.btn-comprar:hover {
+    background-color: #3ea97a;
+}
+
+.btn-editar {
+    background-color: #6c63ff;
+    color: white;
+}
+.btn-editar:hover {
+    background-color: #5952e4;
+}
+
+.btn-eliminar {
+    background-color: #f67280;
+    color: white;
+}
+.btn-eliminar:hover {
+    background-color: #e05a68;
+}
+
+.btn-add {
+    background-color: #ffb347;
+    color: white;
+}
+.btn-add:hover {
+    background-color: #ffa726;
+}
+
+.btn-inactivos {
+    background-color: #b39ddb;
+    color: white;
+    margin-left: 10px;
+}
+.btn-inactivos:hover {
+    background-color: #a087c2;
+}
+
+.btn-admin-usuarios {
+    background-color: #4db6ac;
+    color: white;
+}
+.btn-admin-usuarios:hover {
+    background-color: #3ca89c;
+}
+
+/* Barra de acciones */
+.action-bar {
+    width: 90%;
+    margin: 10px auto 20px auto;
+    display: flex;
+    gap: 12px;
+}
+
+/* Tabla de productos */
+table {
+    width: 90%;
+    margin: 0 auto 40px auto;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+th, td {
+    border: 1px solid #e0e0e0;
+    padding: 12px;
+    text-align: center;
+}
+
+th {
+    background-color: #e3f2fd;
+    color: #333;
+    font-weight: 600;
+}
+
+/* Botones dentro de celdas */
+table td > .btn {
+    margin-right: 8px;
+}
+
+table td > .btn:last-child {
+    margin-right: 0;
+}
+
+/* Modales */
+#modalEliminar,
+#modalStockError {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Contenido del modal */
+#modalEliminar .modal-content,
+#modalStockError > div {
+    background: white;
+    padding: 24px;
+    border-radius: 10px;
+    width: 320px;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+#modalEliminar .modal-content h3,
+#modalStockError h3 {
+    margin-top: 0;
+    font-weight: 600;
+}
+
+/* Botones de modal */
+#modalEliminar button,
+#modalStockError button {
+    margin-top: 20px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+#modalEliminar button:first-child {
+    background-color: #ef5350;
+    color: white;
+}
+
+#modalEliminar button:last-child,
+#modalStockError button {
+    background-color: #eeeeee;
+}
+
+/* Botón Añadir Usuario */
+.btn-anadir {
+    background-color: #6c63ff;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* Contenedor del botón Añadir */
+.boton-anadir-contenedor {
+    width: 90%;
+    margin: 0 auto 20px auto;
+}
+
+/* Botones agrupados */
+.botones-form {
+    display: flex;
+    gap: 12px;
+}

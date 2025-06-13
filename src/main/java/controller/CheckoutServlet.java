@@ -6,6 +6,7 @@ import jakarta.servlet.http.*; // Importa clases HTTP: HttpServlet, HttpServletR
 import model.DetalleFactura; // Importa la clase DetalleFactura del modelo
 import model.Factura; // Importa la clase Factura del modelo
 import model.Producto; // Importa la clase Producto del modelo
+import services.GeneradorFacturaXml;
 import services.InvoiceService; // Importa el servicio que maneja facturas
 import services.ProductService; // Importa el servicio que maneja productos
 import util.ClaveAccesoUtil;
@@ -144,6 +145,13 @@ public class    CheckoutServlet extends HttpServlet { // Declara la clase que ex
             request.setAttribute("mensajeError", "Error al guardar detalles de la factura o al actualizar stock."); // Define mensaje de error
             request.getRequestDispatcher("cart.jsp").forward(request, response); // Muestra la vista del carrito
             return; // Termina la ejecución
+        }
+
+        try {
+            GeneradorFacturaXml.generarFacturaXML(facturaId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // No detienes la compra, solo informas del error al log o consola
         }
 
         // Vaciar carrito en sesión

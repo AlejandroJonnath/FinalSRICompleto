@@ -50,10 +50,10 @@ public class Wssri {
 
             // Create the Aprobacion directory if it doesn't exist
             // MODIFICACIÓN CLAVE AQUÍ: CAMBIAR LA RUTA DE GUARDADO
-            File carpetaAprobacion = new File("src/main/resources/RespuestaSOAP/");
+            File carpetaAprobacion = new File("src/main/resources/Autorizados/");
             if (!carpetaAprobacion.exists()) {
                 carpetaAprobacion.mkdirs(); // Creates the directory and any necessary but nonexistent parent directories.
-                System.out.println("Carpeta 'src/main/resources/RespuestaSOAP/' creada.");
+                System.out.println("Carpeta 'src/main/resources/Autorizados/' creada.");
             }
 
             // Parse the SOAP response

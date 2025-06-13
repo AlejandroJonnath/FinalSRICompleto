@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<factura xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="comprobante" version="2.0.0" xsi:noNamespaceSchemaLocation="factura_V2.0.0.xsd">
+  <infoTributaria>
+    <ambiente>1</ambiente>
+    <tipoEmision>1</tipoEmision>
+    <razonSocial>Mi Empresa S.A.</razonSocial>
+    <nombreComercial>Mi Empresa</nombreComercial>
+    <ruc>1719284752001</ruc>
+    <claveAcceso>020620250117192847520011001001000000057305267811</claveAcceso>
+    <codDoc>01</codDoc>
+    <estab>001</estab>
+    <ptoEmi>001</ptoEmi>
+    <secuencial>00000005</secuencial>
+    <dirMatriz>Av. Principal 123</dirMatriz>
+  </infoTributaria>
+  <infoFactura>
+    <fechaEmision>02/06/2025</fechaEmision>
+    <dirEstablecimiento>Dirección no especificada</dirEstablecimiento>
+    <tipoIdentificacionComprador>05</tipoIdentificacionComprador>
+    <razonSocialComprador>Bryan</razonSocialComprador>
+    <identificacionComprador>1729271336</identificacionComprador>
+    <totalSinImpuestos>48.00</totalSinImpuestos>
+    <totalDescuento>0.00</totalDescuento>
+    <totalConImpuestos>
+      <totalImpuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>5</codigoPorcentaje>
+        <descuentoAdicional>0.00</descuentoAdicional>
+        <baseImponible>48.00</baseImponible>
+        <tarifa>15</tarifa>
+        <valor>3.46</valor>
+      </totalImpuesto>
+    </totalConImpuestos>
+    <importeTotal>51.46</importeTotal>
+    <moneda>DOLAR</moneda>
+    <pagos>
+      <pago>
+        <formaPago>01</formaPago>
+        <total>51.46</total>
+      </pago>
+    </pagos>
+  </infoFactura>
+  <detalles>
+    <detalle>
+      <codigoPrincipal>4</codigoPrincipal>
+      <descripcion>Rascador para gato</descripcion>
+      <cantidad>4</cantidad>
+      <precioUnitario>12.00</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>48.00</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>5</codigoPorcentaje>
+          <tarifa>7.20</tarifa>
+          <baseImponible>48.00</baseImponible>
+          <valor>3.46</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+  </detalles>
+  <infoAdicional>
+    <campoAdicional nombre="Email">cliente@correo.com</campoAdicional>
+  </infoAdicional>
+</factura>

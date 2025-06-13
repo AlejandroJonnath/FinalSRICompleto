@@ -19,8 +19,8 @@ import java.util.List;
 
 public class GeneradorFacturaXml {
 
-    private static final String RUTA_NO_FIRMADOS = "C:/Users/David Ruiz/IdeaProjects/SRI-Facturacion/src/main/resources/XML/NoFirmados/";
-    private static final String RUTA_FIRMADOS    = "C:/Users/David Ruiz/IdeaProjects/SRI-Facturacion/src/main/resources/XML/Firmados/";
+    private static final String RUTA_NO_FIRMADOS = "src/main/resources/XML/NoFirmados/";
+    private static final String RUTA_FIRMADOS    = "src/main/resources/XML/Firmados/";
 
     private static FacturaRepository facturaRepository = new FacturaRepositoryImple();
 
@@ -152,7 +152,7 @@ public class GeneradorFacturaXml {
             String rutaFirmado = RUTA_FIRMADOS + "factura_" + facturaId + ".xml";
 
 // Parámetros para firmar
-            String keystorePath = "C:/Users/David Ruiz/IdeaProjects/SRI-Facturacion/src/main/resources/certs/14045426_identity_1719284752.p12";
+            String keystorePath = "src/main/resources/certs/14045426_identity_1719284752.p12";
             String keystorePass = "Elvis2103";
             String alias = "1";
             String keyPass = "Elvis2103";

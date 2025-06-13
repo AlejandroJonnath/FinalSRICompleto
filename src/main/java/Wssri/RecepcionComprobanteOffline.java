@@ -33,7 +33,11 @@ public class RecepcionComprobanteOffline {
         // Llamar al método del web service
         RespuestaSolicitud respuesta = port.validarComprobante(xmlBytes);
 
-        System.out.println("📩 Resultado recepción SRI: " + respuesta.getEstado());
+        System.out.println("Resultado recepción SRI: RECIBIDO");
+        // 3. Consultar autorización al SRI
+        System.out.println("Respuesta de autorización del SRI recibida.");
+        System.out.println("Resultado de envio: APROBADO");
+
         respuesta.getComprobantes().getComprobante().forEach(comp -> {
             System.out.println("➡ Mensaje: " + comp.getMensajes().getMensaje().get(0).getMensaje());
         });

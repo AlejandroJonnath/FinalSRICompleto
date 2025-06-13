@@ -13,7 +13,7 @@
             
         <ruc>1719284752001</ruc>
             
-        <claveAcceso>020620250117192847520011001001000000164538675511</claveAcceso>
+        <claveAcceso>020620250117192847520011001001000000057305267811</claveAcceso>
             
         <codDoc>01</codDoc>
             
@@ -21,7 +21,7 @@
             
         <ptoEmi>001</ptoEmi>
             
-        <secuencial>00000016</secuencial>
+        <secuencial>00000005</secuencial>
             
         <dirMatriz>Av. Principal 123</dirMatriz>
           
@@ -31,15 +31,15 @@
             
         <fechaEmision>02/06/2025</fechaEmision>
             
-        <dirEstablecimiento>Pomasqui</dirEstablecimiento>
+        <dirEstablecimiento>Dirección no especificada</dirEstablecimiento>
             
         <tipoIdentificacionComprador>05</tipoIdentificacionComprador>
             
-        <razonSocialComprador>David Alejandro Ruiz Carrion </razonSocialComprador>
+        <razonSocialComprador>Bryan</razonSocialComprador>
             
-        <identificacionComprador>1104706476</identificacionComprador>
+        <identificacionComprador>1729271336</identificacionComprador>
             
-        <totalSinImpuestos>69.98</totalSinImpuestos>
+        <totalSinImpuestos>48.00</totalSinImpuestos>
             
         <totalDescuento>0.00</totalDescuento>
             
@@ -53,17 +53,17 @@
                         
                 <descuentoAdicional>0.00</descuentoAdicional>
                         
-                <baseImponible>69.98</baseImponible>
+                <baseImponible>48.00</baseImponible>
                         
                 <tarifa>15</tarifa>
                         
-                <valor>10.50</valor>
+                <valor>3.46</valor>
                       
             </totalImpuesto>
                 
         </totalConImpuestos>
             
-        <importeTotal>80.48</importeTotal>
+        <importeTotal>51.46</importeTotal>
             
         <moneda>DOLAR</moneda>
             
@@ -73,7 +73,7 @@
                         
                 <formaPago>01</formaPago>
                         
-                <total>80.48</total>
+                <total>51.46</total>
                       
             </pago>
                 
@@ -85,17 +85,17 @@
             
         <detalle>
                   
-            <codigoPrincipal>17</codigoPrincipal>
+            <codigoPrincipal>4</codigoPrincipal>
                   
-            <descripcion>Alejandro</descripcion>
+            <descripcion>Rascador para gato</descripcion>
                   
-            <cantidad>1</cantidad>
+            <cantidad>4</cantidad>
                   
-            <precioUnitario>34.99</precioUnitario>
+            <precioUnitario>12.00</precioUnitario>
                   
             <descuento>0.00</descuento>
                   
-            <precioTotalSinImpuesto>34.99</precioTotalSinImpuesto>
+            <precioTotalSinImpuesto>48.00</precioTotalSinImpuesto>
                   
             <impuestos>
                         
@@ -105,45 +105,11 @@
                               
                     <codigoPorcentaje>5</codigoPorcentaje>
                               
-                    <tarifa>15.00</tarifa>
+                    <tarifa>7.20</tarifa>
                               
-                    <baseImponible>34.99</baseImponible>
+                    <baseImponible>48.00</baseImponible>
                               
-                    <valor>5.25</valor>
-                            
-                </impuesto>
-                      
-            </impuestos>
-                
-        </detalle>
-            
-        <detalle>
-                  
-            <codigoPrincipal>15</codigoPrincipal>
-                  
-            <descripcion>Alejandro</descripcion>
-                  
-            <cantidad>1</cantidad>
-                  
-            <precioUnitario>34.99</precioUnitario>
-                  
-            <descuento>0.00</descuento>
-                  
-            <precioTotalSinImpuesto>34.99</precioTotalSinImpuesto>
-                  
-            <impuestos>
-                        
-                <impuesto>
-                              
-                    <codigo>2</codigo>
-                              
-                    <codigoPorcentaje>5</codigoPorcentaje>
-                              
-                    <tarifa>15.00</tarifa>
-                              
-                    <baseImponible>34.99</baseImponible>
-                              
-                    <valor>5.25</valor>
+                    <valor>3.46</valor>
                             
                 </impuesto>
                       
@@ -155,7 +121,7 @@
       
     <infoAdicional>
             
-        <campoAdicional nombre="Email">ruizdac@gmail.com</campoAdicional>
+        <campoAdicional nombre="Email">cliente@correo.com</campoAdicional>
           
     </infoAdicional>
     
@@ -168,14 +134,14 @@
                     <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
                 </Transforms>
                 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
-                <DigestValue>pr/iM3GFW4xxcLurdJ7ntXuPNAGJ77oRTKZ4ZSzzCqk=</DigestValue>
+                <DigestValue>e1y9I5eiUblXNGFVg4QlSlYbp/uzKMPNrhU6pQy9TdY=</DigestValue>
             </Reference>
         </SignedInfo>
-        <SignatureValue>PHJ8ZtjYUoRKdBJc4JGFzFxdZM8phfr7kEtnZYo0cyi8cu6aBCqbrLaRsSp9Xw6qgpfuH6QqmH8Q&#13;
-GTvrcdErGB7aKNOFql0x3gLsMhsMPvrSDTNKMVnKd/eVRapQJqK+wxmKGvgvbp0h6TYHS90cRaZM&#13;
-scfKNqG9uQTfufiJxbwsvyqRBffS4HC8VePk0fzLkUOdje5L9kQiz3RtpMfPPOqFM5DyJYryByZS&#13;
-4zYOE/X1EKLMU/+CQUuFo938fGJk6upytsXXMstZYGOIb8ZcRnUsCO69r/Gm903K818lSR8hi/B1&#13;
-aseG0iHZE8P521v9G+JF3AeT0OUJ9fDo4GRtzQ==</SignatureValue>
+        <SignatureValue>DobAPIennqU6PdQPgF0NvZOj/38xVvuRDXOspkydRmTXBO0nrJFVmY09NDWpA6+BICbdrQzZYMzW&#13;
+YhoAFblR75CMNLGgKVvZTrpQpyE/ORANNhx/3Ohpg7TxLeEWIMoXSJ7cB2bXkoQewXfsQ4CJcwB1&#13;
+oZzagobKYUMbC7qu4TjdU+VKGbKNbtmbSKTBRoJFLbnOdAN/5ASopekN7ZnVgOjBnTpjuueqLP7W&#13;
+FOu+kGmRLR7SdsDDaVINWGMy6HvMaq+82mHE50Q875NcCMnG/qDyFoupTYO92Fy2FXgcpDr9n8OQ&#13;
+7SNajVsm6ICq8WWtvPl/0CyhN7JvXfkxLhId0Q==</SignatureValue>
         <KeyInfo>
             <X509Data>
                 <X509Certificate>MIIJTjCCBzagAwIBAgIIJkW2GNGVIRkwDQYJKoZIhvcNAQELBQAwgbgxCzAJBgNVBAYTAkVTMUQw&#13;

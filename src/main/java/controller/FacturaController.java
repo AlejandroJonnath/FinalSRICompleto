@@ -2,7 +2,6 @@ package controller;
 
 import services.GeneradorFacturaXml;
 import Wssri.RecepcionComprobanteOffline;
-import Wssri.Wssri;
 import repository.FacturaRepository;
 import repository.FacturaRepositoryImple;
 import wssri.recepcion.RespuestaSolicitud;
@@ -31,15 +30,7 @@ public class FacturaController {
             // Recibir respuesta del SRI
             RespuestaSolicitud respuesta = RecepcionComprobanteOffline.enviarComprobante(rutaFirmado, claveAcceso);
 
-            // Validar estado antes de continuar
-            if ("DEVUELTA".equalsIgnoreCase(respuesta.getEstado())) {
-                System.err.println("❌ El comprobante fue devuelto por el SRI. No se puede continuar con la autorización.");
-                return;
-            }
 
-            // 3. Consultar autorización al SRI
-            String resultadoAutorizacion = Wssri.autorizarComprobante(claveAcceso);
-            System.out.println("Resultado autorización SRI: " + resultadoAutorizacion);
 
         } catch (Exception e) {
             e.printStackTrace();

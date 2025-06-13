@@ -6,77 +6,60 @@
     <razonSocial>Mi Empresa S.A.</razonSocial>
     <nombreComercial>Mi Empresa</nombreComercial>
     <ruc>1719284752001</ruc>
-    <claveAcceso>020620250117192847520011001001000000164538675511</claveAcceso>
+    <claveAcceso>020620250117192847520011001001000000087015448411</claveAcceso>
     <codDoc>01</codDoc>
     <estab>001</estab>
     <ptoEmi>001</ptoEmi>
-    <secuencial>00000016</secuencial>
+    <secuencial>00000008</secuencial>
     <dirMatriz>Av. Principal 123</dirMatriz>
   </infoTributaria>
   <infoFactura>
     <fechaEmision>02/06/2025</fechaEmision>
-    <dirEstablecimiento>Pomasqui</dirEstablecimiento>
+    <dirEstablecimiento>Canada Y Bogota</dirEstablecimiento>
     <tipoIdentificacionComprador>05</tipoIdentificacionComprador>
-    <razonSocialComprador>David Alejandro Ruiz Carrion </razonSocialComprador>
-    <identificacionComprador>1104706476</identificacionComprador>
-    <totalSinImpuestos>69.98</totalSinImpuestos>
+    <razonSocialComprador>Bryan</razonSocialComprador>
+    <identificacionComprador>1729271336</identificacionComprador>
+    <totalSinImpuestos>59.99</totalSinImpuestos>
     <totalDescuento>0.00</totalDescuento>
     <totalConImpuestos>
       <totalImpuesto>
         <codigo>2</codigo>
         <codigoPorcentaje>5</codigoPorcentaje>
         <descuentoAdicional>0.00</descuentoAdicional>
-        <baseImponible>69.98</baseImponible>
+        <baseImponible>59.99</baseImponible>
         <tarifa>15</tarifa>
-        <valor>10.50</valor>
+        <valor>9.00</valor>
       </totalImpuesto>
     </totalConImpuestos>
-    <importeTotal>80.48</importeTotal>
+    <importeTotal>68.99</importeTotal>
     <moneda>DOLAR</moneda>
     <pagos>
       <pago>
         <formaPago>01</formaPago>
-        <total>80.48</total>
+        <total>68.99</total>
       </pago>
     </pagos>
   </infoFactura>
   <detalles>
     <detalle>
-      <codigoPrincipal>17</codigoPrincipal>
-      <descripcion>Alejandro</descripcion>
+      <codigoPrincipal>10</codigoPrincipal>
+      <descripcion>Pecera básica 20L</descripcion>
       <cantidad>1</cantidad>
-      <precioUnitario>34.99</precioUnitario>
+      <precioUnitario>59.99</precioUnitario>
       <descuento>0.00</descuento>
-      <precioTotalSinImpuesto>34.99</precioTotalSinImpuesto>
+      <precioTotalSinImpuesto>59.99</precioTotalSinImpuesto>
       <impuestos>
         <impuesto>
           <codigo>2</codigo>
           <codigoPorcentaje>5</codigoPorcentaje>
           <tarifa>15.00</tarifa>
-          <baseImponible>34.99</baseImponible>
-          <valor>5.25</valor>
-        </impuesto>
-      </impuestos>
-    </detalle>
-    <detalle>
-      <codigoPrincipal>15</codigoPrincipal>
-      <descripcion>Alejandro</descripcion>
-      <cantidad>1</cantidad>
-      <precioUnitario>34.99</precioUnitario>
-      <descuento>0.00</descuento>
-      <precioTotalSinImpuesto>34.99</precioTotalSinImpuesto>
-      <impuestos>
-        <impuesto>
-          <codigo>2</codigo>
-          <codigoPorcentaje>5</codigoPorcentaje>
-          <tarifa>15.00</tarifa>
-          <baseImponible>34.99</baseImponible>
-          <valor>5.25</valor>
+          <baseImponible>59.99</baseImponible>
+          <valor>9.00</valor>
         </impuesto>
       </impuestos>
     </detalle>
   </detalles>
   <infoAdicional>
-    <campoAdicional nombre="Email">ruizdac@gmail.com</campoAdicional>
+    <campoAdicional nombre="Email">bryjus2003@gmail.com</campoAdicional>
   </infoAdicional>
 </factura>

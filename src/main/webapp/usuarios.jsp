@@ -22,7 +22,7 @@
   String usuarioLogueado = (String) session.getAttribute("usuario");
 
   // Obtener el rol del usuario
-  String rol             = (String) session.getAttribute("rol");
+  String rol= (String) session.getAttribute("rol");
 
   // Si no hay usuario autenticado, redirigir a login
   if (usuarioLogueado == null) {

@@ -6,13 +6,6 @@
     <meta charset="UTF-8">
     <title>Carrito de Compras - Mimir Petshop</title>
     <link rel="stylesheet" href="css/cart.css">
-    <style>
-        .error {
-            color: red;
-            font-size: 0.9em;
-            margin-top: 4px;
-        }
-    </style>
 </head>
 <body>
 <%
@@ -22,20 +15,14 @@
         return;
     }
 
-    // Recuperar datos del carrito
     List<Map<String, Object>> items =
             (List<Map<String, Object>>) request.getAttribute("items");
     BigDecimal totalGeneral = (BigDecimal) request.getAttribute("totalGeneral");
     BigDecimal totalIva = (BigDecimal) request.getAttribute("totalIva");
     BigDecimal totalConIva = (BigDecimal) request.getAttribute("totalConIva");
 
-    // Recuperar errores y valores previos del formulario
-    Map<String, String> errores = (Map<String, String>) request.getAttribute("errores");
-    String nombrePrev = (String) request.getAttribute("clienteNombre");
-    String cedulaPrev = (String) request.getAttribute("clienteCedula");
-    String direccionPrev = (String) request.getAttribute("clienteDireccion");
-    String telefonoPrev = (String) request.getAttribute("clienteTelefono");
-    String emailPrev = (String) request.getAttribute("clienteEmail");
+    String mensajeError  = (String) request.getAttribute("mensajeError");
+    String mensajeExito  = (String) request.getAttribute("mensajeExito");
 %>
 
 <div class="top-bar">
@@ -46,6 +33,13 @@
         <a href="logout"><button class="btn">Cerrar Sesión</button></a>
     </div>
 </div>
+
+<% if (mensajeError != null) { %>
+<div class="msg-error"><%= mensajeError %></div>
+<% } %>
+<% if (mensajeExito != null) { %>
+<div class="msg-success"><%= mensajeExito %></div>
+<% } %>
 
 <table>
     <thead>
@@ -65,6 +59,7 @@
                 Integer cantidad = (Integer) item.get("cantidad");
                 BigDecimal subtotal = (BigDecimal) item.get("subtotal");
                 BigDecimal iva = (BigDecimal) item.get("iva");
+
     %>
     <tr>
         <td><%= p.getNombre() %></td>
@@ -96,36 +91,21 @@
 
 <div class="form-checkout">
     <h3>Confirmar Compra</h3>
-    <form action="cart" method="post">
+    <form action="checkout" method="post">
         <label for="clienteNombre">Nombre del Cliente:</label><br/>
-        <input type="text" name="clienteNombre" id="clienteNombre" value="<%= nombrePrev != null ? nombrePrev : "" %>"  /><br/>
-        <% if (errores != null && errores.get("clienteNombre") != null) { %>
-        <div class="error"><%= errores.get("clienteNombre") %></div>
-        <% } %>
+        <input type="text" name="clienteNombre" id="clienteNombre" required /><br/>
 
         <label for="clienteCedula">Cédula:</label><br/>
-        <input type="text" name="clienteCedula" id="clienteCedula" value="<%= cedulaPrev != null ? cedulaPrev : "" %>"  /><br/>
-        <% if (errores != null && errores.get("clienteCedula") != null) { %>
-        <div class="error"><%= errores.get("clienteCedula") %></div>
-        <% } %>
+        <input type="text" name="clienteCedula" id="clienteCedula" required /><br/>
 
-        <label for="clienteDireccion">Dirección:</label><br/>
-        <input type="text" name="clienteDireccion" id="clienteDireccion" value="<%= direccionPrev != null ? direccionPrev : "" %>"  /><br/>
-        <% if (errores != null && errores.get("clienteDireccion") != null) { %>
-        <div class="error"><%= errores.get("clienteDireccion") %></div>
-        <% } %>
+        <label for="clienteDirección">Dirección:</label><br/>
+        <input type="text" name="clienteDireccion" id="clienteDireccion" required /><br/>
 
-        <label for="clienteTelefono">Teléfono:</label><br/>
-        <input type="text" name="clienteTelefono" id="clienteTelefono" value="<%= telefonoPrev != null ? telefonoPrev : "" %>"  /><br/>
-        <% if (errores != null && errores.get("clienteTelefono") != null) { %>
-        <div class="error"><%= errores.get("clienteTelefono") %></div>
-        <% } %>
+        <label for="clienteTelefono">Telefono:</label><br/>
+        <input type="text" name="clienteTelefono" id="clienteTelefono" required /><br/>
 
-        <label for="clienteEmail">Correo:</label><br/>
-        <input type="text" name="clienteEmail" id="clienteEmail" value="<%= emailPrev != null ? emailPrev : "" %>"  /><br/>
-        <% if (errores != null && errores.get("clienteEmail") != null) { %>
-        <div class="error"><%= errores.get("clienteEmail") %></div>
-        <% } %>
+        <label for="clienteCorreo">Correo:</label><br/>
+        <input type="text" name="clienteEmail" id="clienteEmail" required /><br/>
 
         <button type="submit" class="btn btn-checkout">Realizar Pago</button>
     </form>
